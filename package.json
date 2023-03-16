@@ -1,0 +1,24 @@
+{
+  "name": "super-market-automation-system",
+  "version": "1.0.0",
+  "description": "Course project for software engineering  lab",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arjun118/Super-market-automation-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arjun118/Super-market-automation-system/issues"
+  },
+  "homepage": "https://github.com/arjun118/Super-market-automation-system#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.2"
+  }
+}

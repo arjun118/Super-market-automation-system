@@ -1,25 +1,25 @@
-<% layout('../views/boiler_plate')%>
+<% layout('boiler_plate')%>
 
 
 <form action="/bill" method="POST">
     <h2>Customer Details</h2>
     <div>
         <label for="customer">Enter Customer Name:</label>
-        <input type="text" name="customer_name" id="customer_name" required="true">
+        <input type="text" name="customer_name" id="customer_name" >
     </div>
     <div>
         <label for="customer">Enter Customer Contact:</label>
-        <input type="text" name="customer_contact" id="customer_contact" required="true">
+        <input type="text" name="customer_contact" id="customer_contact" >
     </div>
     <h2>Item Details</h2>
     <div>
         <label for="customer">Enter Item Details:</label>
         <div class="form-row" id="item0">
             <div class="col-7">
-                <input type="text" name="item_name[]" class="form-control" placeholder="Item Name"  required="true">
+                <input type="text" name="item_name[]" class="form-control" placeholder="Item Name"  >
             </div>
             <div class="col">
-                <input type="number" name="item_quantity[]" class="form-control" min="1" placeholder="Quantity"  required="true">
+                <input type="number" name="item_quantity[]" class="form-control" min="1" placeholder="Quantity"  >
             </div>
             <div>
                 <button type="button" onclick="remove_item(this)">Remove Item</button>

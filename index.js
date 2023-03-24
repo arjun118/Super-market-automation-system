@@ -32,6 +32,16 @@ app.get('/print',(req,res)=>{
     res.render('print_bill')
 })
 
+function printDiv(divName) {
+    var printContents = document.getElementById(divName).innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}
 
 app.post('/bill',async(req,res)=>{
     // let options = { format: 'A4', path:"bill.pdf" };

@@ -1,70 +1,193 @@
 <% layout('boiler_plate')%>
 
 
-<form action="/bill" method="POST">
+<div style="margin: auto;">
+    <form action="/bill" method="POST">
     <h2>Customer Details</h2>
-    <div>
-        <label for="customer">Enter Customer Name:</label>
-        <input type="text" name="customer_name" id="customer_name" >
-    </div>
-    <div>
-        <label for="customer">Enter Customer Contact:</label>
-        <input type="text" name="customer_contact" id="customer_contact" >
-    </div>
+    <table class="table table-bordered table-hover" id="tab_customer">
+        <tbody>
+          <tr>
+            <th class="text-center">Customer Name</th>
+            <td class="text-center">
+                <div class="input-group mb-2 mb-sm-0">
+                    <input type="text" class="form-control" id="customer_name" name="customername" placeholder="Enter customer name">
+                  </div>
+                </td>          </tr>
+          <tr>
+            <th class="text-center">Customer Contact</th>
+            <td class="text-center">
+            <div class="input-group mb-2 mb-sm-0">
+                <input type="text" class="form-control" id="customer_contact" name="customer_contact" placeholder="Enter contact info">
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    <br>
     <h2>Item Details</h2>
-    <div>
-        <label for="customer">Enter Item Details:</label>
-        <div class="form-row" id="item0">
-            <div class="col-7">
-                <input type="text" name="item_name[]" class="form-control" placeholder="Item Name"  >
-            </div>
-            <div class="col">
-                <input type="number" name="item_quantity[]" class="form-control" min="1" placeholder="Quantity"  >
-            </div>
-            <div>
-                <button type="button" onclick="remove_item(this)">Remove Item</button>
-            </div>
-        </div>
+    <div class="row clearfix">
+      <div class="col-md-12">
+        <table class="table table-bordered table-hover" id="tab_logic">
+          <thead>
+            <tr>
+              <th class="text-center"> # </th>
+              <th class="text-center"> Id </th>
+              <th class="text-center"> Product </th>
+              <th class="text-center"> Qty </th>
+              <th class="text-center"> Price </th>
+              <th class="text-center"> Total </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id='addr0'>
+              <td>1</td>
+              <td><input type="text" name='id[]' placeholder='#' class="form-control id" readonly/></td>
+              <td><input type="text" name='product[]'  placeholder='Enter Product Name' class="form-control" onkeyup="myfunc(this)"/>
+                <ul id="allItems0">
+                    <%for (var i=0;i<items.length;i++){%>
+                        <li value="<%=items[i].id%>" onclick="putitem(this,<%=JSON.stringify(items[i])%>)"><a href="#"><%=items[i].name%></a></li>
+                    <%}%>
+                </ul></td>
+              <td><input type="number" name='qty[]' placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
+              <td><input type="number" name='price[]' placeholder='Unit Price' class="form-control price" readonly/></td>
+              <td><input type="number" name='total[]' placeholder='0.00' class="form-control total" readonly/></td>
+              
+            </tr>
+            <tr id='addr1'></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div>
-        <button type="button" onclick="add_item()">Add Item</button>
+    <div class="row clearfix">
+      <div class="col-md-12">
+        <button type="button" id="add_row" class="btn btn-light pull-left">Add Row</button>
+        <button type="button" id='delete_row' class="pull-right btn btn-light">Delete Row</button>
+      </div>
     </div>
-    <button id="submit" type="submit">Create Bill</button>
+    
+    <div class="row clearfix" style="margin-top:20px">
+      <div class="pull-right col-md-4">
+        <table class="table table-bordered table-hover" id="tab_logic_total">
+          <tbody>
+            <tr>
+              <th class="text-center">Sub Total</th>
+              <td class="text-center"><input type="number" name='sub_total' placeholder='0.00' class="form-control" id="sub_total" readonly/></td>
+            </tr>
+            <tr>
+              <th class="text-center">Tax</th>
+              <td class="text-center"><div class="input-group mb-2 mb-sm-0">
+                  <input type="number" class="form-control" id="tax" placeholder="0">
+                  <div class="input-group-addon">%</div>
+                </div></td>
+            </tr>
+            <tr>
+              <th class="text-center">Tax Amount</th>
+              <td class="text-center"><input type="number" name='tax_amount' id="tax_amount" placeholder='0.00' class="form-control" readonly/></td>
+            </tr>
+            <tr>
+              <th class="text-center">Grand Total</th>
+              <td class="text-center"><input type="number" name='total_amount' id="total_amount" placeholder='0.00' class="form-control" readonly/></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <button type="submit button" class="btn btn-primary">Create Bill</button>
 </form>
+  </div>
 
 
-<style>
-    .controls {
-  width: 294px;
-  margin: 15px auto;
+  <script>
+    $(document).ready(function(){
+    var i=1;
+    $("#add_row").click(function(){b=i-1;
+        $('#addr'+i).html($('#addr'+b).html()).find('td:first-child').html(i+1);
+        $('#addr'+i).find('#allItems'+b).attr("id","allItems"+i);
+      	$('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
+      	i++; 
+  	});
+    $("#delete_row").click(function(){
+    	if(i>1){
+		$("#addr"+(i-1)).html('');
+		i--;
+		}
+		calc();
+	});
+	
+	$('#tab_logic tbody').on('keyup change',function(){
+		calc();
+	});
+	$('#tax').on('keyup change',function(){
+		calc_total();
+	});
+	
+
+});
+
+function calc()
+{
+	$('#tab_logic tbody tr').each(function(i, element) {
+		var html = $(this).html();
+		if(html!='')
+		{
+			var qty = $(this).find('.qty').val();
+			var price = $(this).find('.price').val();
+			$(this).find('.total').val(qty*price);
+			
+			calc_total();
+		}
+    });
 }
 
-#remove_fields {
-  float: right;
-}
-</style>
-
-
-<script>
-var i = 0;
-var original = document.getElementById('item0');
-
-function add_item() {
-    var clone = original.cloneNode(true);
-    clone.id = "item" + ++i;
-    original.parentNode.appendChild(clone);
+function calc_total()
+{
+	total=0;
+	$('.total').each(function() {
+        total += parseInt($(this).val());
+    });
+	$('#sub_total').val(total.toFixed(2));
+	tax_sum=total/100*$('#tax').val();
+	$('#tax_amount').val(tax_sum.toFixed(2));
+	$('#total_amount').val((tax_sum+total).toFixed(2));
 }
 
-function remove_item(el) {
-    i--;
-    if(i>=0)
-    {
-        $(el).parent('div').parent('div').remove();
+function myfunc(y)
+{
+    x=y.parentElement.parentElement.id
+    x=x.substring(4)
+    var input, filter, ul, li, a, i, txtValue;
+    input = y;
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("allItems"+x);
+    ul.style.display="block";
+    li = ul.getElementsByTagName('li');
+
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+        } else {
+        li[i].style.display = "none";
+        }
     }
-    else
-    {
-        i++;
-        alert("Bill must have atleast one item")
-    }
 }
-</script>
+
+function putitem(y,i)
+{
+    x=y.parentElement.parentElement.parentElement.id
+    x=x.substring(4)
+
+    <%i=JSON.parse(i)%>
+
+    var input, filter, ul, li, a, i, txtValue;
+    ul = document.getElementById("allItems"+x);
+    ul.style.display="none"
+    input=document.getElementById("addr"+x)
+    input.children[1].children[0].setAttribute("value",i.id)
+    input.children[2].children[0].setAttribute("value",i.name)
+    input.children[4].children[0].setAttribute("value",i.price)
+
+    console.log(i.id)
+}
+  </script>

@@ -24,7 +24,29 @@ app.get('/stat',(req,res)=>{
     res.render('sales_stat')
 })
 app.get('/bill',(req,res)=>{
-    res.render('bill')
+    var items =[
+        {
+            "id":"0",
+            "name":"cake",
+            "price":"20"
+        },
+        {
+            "id":"1",
+            "name":"biscuit",
+            "price":"10"
+        },
+        {
+            "id":"2",
+            "name":"vegetable",
+            "price":"50"
+        },
+        {
+            "id":"3",
+            "name":"toy",
+            "price":"100"
+        },
+    ]
+    res.render('bill',{items})
 })
 
 
@@ -44,28 +66,14 @@ function printDiv(divName) {
 }
 
 app.post('/bill',async(req,res)=>{
-    // let options = { format: 'A4', path:"bill.pdf" };
-    // let file = { content: "<h1>Welcome to html-pdf-node</h1>" };
-
-    // html_to_pdf.generatePdf(file, options).then(output => {
-    //     console.log("PDF :-", output); // PDF Buffer:- [{url: "https://example.com", name: "example.pdf", buffer: <PDF buffer>}]
-    // });
-
-
-    // console.log("HHHH")
-    // res.redirect('/bill')
-
     var bill= req.body
     const date=new Date()
     bill.date=date
-    total=0
-    for (var i=0;i<bill.item_quantity.length;i++){
-        total+=bill.item_quantity[i]
-    }
-    bill.total=total
     // bill=JSON.stringify(bill)
 
     res.render('print_bill',{bill})
+
+    // res.send(req.body)
 })
 
 

@@ -28,21 +28,25 @@ app.get('/bill',(req,res)=>{
         {
             "id":"0",
             "name":"cake",
+            "qty":"10",
             "price":"20"
         },
         {
             "id":"1",
             "name":"biscuit",
+            "qty":"20",
             "price":"10"
         },
         {
             "id":"2",
             "name":"vegetable",
+            "qty":"30",
             "price":"50"
         },
         {
             "id":"3",
             "name":"toy",
+            "qty":"5",
             "price":"100"
         },
     ]
@@ -74,6 +78,17 @@ app.post('/bill',async(req,res)=>{
     res.render('print_bill',{bill})
 
     // res.send(req.body)
+
+    // let options = { format: 'A4', path:"bill.pdf" };
+    // let file = { content: "<h1>Welcome to html-pdf-node</h1>" };
+
+    // html_to_pdf.generatePdf(file, options).then(output => {
+    //     console.log("PDF :-", output); // PDF Buffer:- [{url: "https://example.com", name: "example.pdf", buffer: <PDF buffer>}]
+    // });
+
+
+    // console.log("HHHH")
+    // res.redirect('/bill')
 })
 
 

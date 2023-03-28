@@ -1,5 +1,6 @@
 <% layout('boiler_plate')%>
 
+<div style="margin: auto; ">
 <div id="printableArea">
 <style>
 body {
@@ -255,10 +256,15 @@ table tr td:last-child {
 	</div>
   </div>
 </div>
-<input type="button" onclick="printDiv('printableArea')" value="print a div!" />
-
+<br>
+<div class="text-center">
+	<input type="button" class="btn btn-info btn-lg" onclick="printDiv('printableArea')" value="Print" />
+</div>
+</div>
 <script>
+	window.onload=printDiv('printableArea');
 	function printDiv(divName) {
+		console.log("HHHHHHHH")
     var divContents = document.getElementById(divName).innerHTML;
         var a = window.open('', '', 'height=500, width=500');
         a.document.write('<html>');

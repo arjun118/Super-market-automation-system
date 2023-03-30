@@ -12,9 +12,10 @@ const billSchema= new Schema({
         required:true
     },
     items:[
-       { item_ref:{type:Schema.Types.ObjectId, ref:'Item', required:true},
-         quantity:{type:Number, required:true},
-         cost:{type:Number,required:true}
+       { 
+            item_ref:{type:Schema.Types.ObjectId, ref:'Item', required:true},
+            quantity:{type:Number, required:true},
+            cost:{type:Number,required:true}
         }
     ],
     total_cost:{

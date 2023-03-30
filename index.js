@@ -3,14 +3,25 @@ const app=express()
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
-
-
-var html_to_pdf = require('html-pdf-node');
-const puppeteer = require('puppeteer');
-const fs = require('fs');
+const mongoose = require('mongoose');
 const Window = require('window');
- 
 const window = new Window();
+
+const Bill = require('./models/bill')
+const Item = require('./models/item')
+
+
+mongoose.connect('mongodb://127.0.0.1:27017/supermarket',{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("Database connected");
+});
+
 
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
@@ -59,6 +70,12 @@ app.get('/print',(req,res)=>{
     res.render('print_bill')
 })
 
+app.get('/additem',async(req,res)=>{
+    const item = new Item({item_name:"toy",quantity:"5",unit_price:"100",description:"kids"})
+    await item.save();
+    res.send(item)
+})
+
 function printDiv(divName) {
     var printContents = document.getElementById(divName).innerHTML;
     var originalContents = document.body.innerHTML;
@@ -74,11 +91,13 @@ app.post('/bill',async(req,res)=>{
     var bill= req.body
     const date=new Date()
     bill.date=date
+
+    // const new_bill = new Bill({customer_name:bill.customername, contact:bill.customer_contact, items:})
     // bill=JSON.stringify(bill)
 
-    res.render('print_bill',{bill})
+    // res.render('print_bill',{bill})
 
-    // res.send(req.body)
+    res.send(req.body)
 
     // let options = { format: 'A4', path:"bill.pdf" };
     // let file = { content: "<h1>Welcome to html-pdf-node</h1>" };

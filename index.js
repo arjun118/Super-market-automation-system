@@ -4,9 +4,6 @@ const path = require('path');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
 
-var html_to_pdf = require('html-pdf-node');
-const puppeteer = require('puppeteer');
-const fs = require('fs');
 const Window = require('window');
  
 const window = new Window();
@@ -68,6 +65,10 @@ function printDiv(divName) {
 
     document.body.innerHTML = originalContents;
 }
+
+app.get('/inventory',(req,res)=>{
+    res.render('inventory')
+})
 
 app.post('/bill',async(req,res)=>{
     var bill= req.body

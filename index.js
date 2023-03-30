@@ -4,6 +4,13 @@ const path = require('path');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
 
+<<<<<<< HEAD
+=======
+
+var html_to_pdf = require('html-pdf-node');
+const puppeteer = require('puppeteer');
+const fs = require('fs');
+>>>>>>> 5e9e9513a8f88fa47f24ce1e2a518f234e6a5165
 const Window = require('window');
  
 const window = new Window();

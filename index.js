@@ -5,9 +5,6 @@ const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const mongoose = require('mongoose')
 
-var html_to_pdf = require('html-pdf-node');
-const puppeteer = require('puppeteer');
-const fs = require('fs');
 const Window = require('window');
 const window = new Window();
 

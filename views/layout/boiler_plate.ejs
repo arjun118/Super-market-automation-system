@@ -28,20 +28,25 @@
 
 </head>
 
-<body class="d-flex flex-column vh-100">
-    <%- include('../partials/navbar')%>
-    <main class="container" style="margin: 0; padding: 0;">
-        <%- include('../partials/flash')%>
-            <div class="row" style="display:flex; flex-wrap: nowrap;">
-                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-                    <%- include('../partials/left_panel')  %>
-                </div>
-                <div class="col" style=" padding-bottom: 5%; padding-top: 5%; padding-left: 5%;  padding-right: 1%;">
+<body class="d-flex flex-column">
+    <div class="d-flex align-items-stretch">
+        <div class="p-2 col-auto px-sm-2 px-0 bg-dark"> 
+            <%- include('../partials/left_panel')  %>
+        </div>
+        <div class="d-flex flex-column" style=" width: 100%;">
+            <div class="d-flex">
+                <%- include('../partials/navbar')%>
+            </div>
+            <div class="p-2 text-center" style="display: flex; justify-content: center; align-items: center;">
+                <div style="width: 80%;">
                     <%- body %>
                 </div>
             </div>
-    </main>
-    <%- include('../partials/footer')%>
+        </div>
+    </div>
+    <div class="text-center" style="bottom: 0; width: 100%;">
+        <%- include('../partials/footer')%>
+    </div>
 </body>
 
 </html>

@@ -3,7 +3,7 @@ const app=express()
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
-
+const mongoose = require('mongoose')
 
 var html_to_pdf = require('html-pdf-node');
 const puppeteer = require('puppeteer');
@@ -39,33 +39,34 @@ app.get('/',(req,res)=>{
 app.get('/stat',(req,res)=>{
     res.render('sales_stat')
 })
-app.get('/bill',(req,res)=>{
-    var items =[
-        {
-            "id":"0",
-            "name":"cake",
-            "qty":"10",
-            "price":"20"
-        },
-        {
-            "id":"1",
-            "name":"biscuit",
-            "qty":"20",
-            "price":"10"
-        },
-        {
-            "id":"2",
-            "name":"vegetable",
-            "qty":"30",
-            "price":"50"
-        },
-        {
-            "id":"3",
-            "name":"toy",
-            "qty":"5",
-            "price":"100"
-        },
-    ]
+app.get('/bill',async(req,res)=>{
+    // var items =[
+    //     {
+    //         "id":"0",
+    //         "name":"cake",
+    //         "qty":"10",
+    //         "price":"20"
+    //     },
+    //     {
+    //         "id":"1",
+    //         "name":"biscuit",
+    //         "qty":"20",
+    //         "price":"10"
+    //     },
+    //     {
+    //         "id":"2",
+    //         "name":"vegetable",
+    //         "qty":"30",
+    //         "price":"50"
+    //     },
+    //     {
+    //         "id":"3",
+    //         "name":"toy",
+    //         "qty":"5",
+    //         "price":"100"
+    //     },
+    // ]
+    const items = await Item.find({})
     res.render('bill',{items})
 })
 
@@ -80,16 +81,6 @@ app.get('/additem',async(req,res)=>{
     res.send(item)
 })
 
-function printDiv(divName) {
-    var printContents = document.getElementById(divName).innerHTML;
-    var originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = printContents;
-
-    window.print();
-
-    document.body.innerHTML = originalContents;
-}
 
 app.get('/inventory',(req,res)=>{
     res.render('inventory')
@@ -100,23 +91,30 @@ app.post('/bill',async(req,res)=>{
     const date=new Date()
     bill.date=date
 
-    // const new_bill = new Bill({customer_name:bill.customername, contact:bill.customer_contact, items:})
+    var bill_items=[]
+
+    for (let i = 0; i < bill.id.length; i++) {
+        var q = await Item.find({_id:bill.id[i]})
+        q=q[0].quantity
+        const x = await Item.findOneAndUpdate({_id:bill.id[i]},{quantity:q-bill.qty[i]})
+        bill_items.push({item_ref:bill.id[i],
+        quantity:bill.qty[i],
+        cost:bill.total[i]})
+    }
+    // console.log(bill_items)
+    
+    const new_bill = new Bill({customer_name:bill.customer_name,contact:bill.contact,
+    items:bill_items,
+    total_cost:bill.sub_total,
+    date:bill.date})
+    await new_bill.save();
+
     // bill=JSON.stringify(bill)
 
-    // res.render('print_bill',{bill})
+    res.render('print_bill',{bill})
 
-    res.send(req.body)
+    // res.send(req.body)
 
-    // let options = { format: 'A4', path:"bill.pdf" };
-    // let file = { content: "<h1>Welcome to html-pdf-node</h1>" };
-
-    // html_to_pdf.generatePdf(file, options).then(output => {
-    //     console.log("PDF :-", output); // PDF Buffer:- [{url: "https://example.com", name: "example.pdf", buffer: <PDF buffer>}]
-    // });
-
-
-    // console.log("HHHH")
-    // res.redirect('/bill')
 })
 
 

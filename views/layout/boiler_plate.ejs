@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%;">
 
 <head>
     <meta charset="UTF-8">
@@ -28,7 +28,7 @@
 
 </head>
 
-<body class="d-flex flex-column">
+<body class="d-flex flex-column" style="height: 100%;">
     <div class="d-flex align-items-stretch">
         <div class="p-2 col-auto px-sm-2 px-0 bg-dark"> 
             <%- include('../partials/left_panel')  %>
@@ -37,8 +37,8 @@
             <div class="d-flex">
                 <%- include('../partials/navbar')%>
             </div>
-            <div class="p-2 text-center" style="display: flex; justify-content: center; align-items: center;">
-                <div style="width: 80%;">
+            <div class="d-flex flex-column p-2 text-center" style="display: flex; justify-content: center; align-items: center;">
+                <div style="width: 80%;" class="text-center">
                     <%- body %>
                 </div>
             </div>

@@ -36,6 +36,12 @@ app.get('/',(req,res)=>{
 app.get('/stat',(req,res)=>{
     res.render('sales_stat')
 })
+app.get('/login',(req,res)=>{
+    res.render('login')
+})
+app.get('/register',(req,res)=>{
+    res.render('register')
+})
 app.get('/bill',async(req,res)=>{
     // var items =[
     //     {
@@ -114,6 +120,14 @@ app.post('/bill',async(req,res)=>{
 
 })
 
+
+app.post('/register',async(req,res)=>{
+    res.send(req.body)
+})
+
+app.post('/login',async(req,res)=>{
+    res.send(req.body)
+})
 
 app.listen(3000,()=>{
     console.log("Listening on port 3000!!..")

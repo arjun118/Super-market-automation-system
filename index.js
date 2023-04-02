@@ -10,6 +10,7 @@ const window = new Window();
 
 const Bill = require('./models/bill')
 const Item = require('./models/item')
+const Sales=require('./models/sales')
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/supermarket',{
@@ -33,8 +34,24 @@ app.use(express.urlencoded({extended:true}))
 app.get('/',(req,res)=>{
     res.render('home')
 })
-app.get('/stat',(req,res)=>{
-    res.render('sales_stat')
+app.get('/stat',async (req,res)=>{
+    const data=await Sales.aggregate([
+        {
+            $group: {
+              _id: {$month: "$date"},
+              total_month_revenue: {
+                $sum:"$total"
+              }
+            }
+        },
+        {
+            $addFields: {
+                month:"$_id"
+              }
+        }
+    ])
+    const sales={data}
+    res.render('sales_stat',{sales})
 })
 app.get('/login',(req,res)=>{
     res.render('login')

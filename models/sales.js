@@ -12,5 +12,7 @@ const salesSchema = new Schema({
     total:{
         type:Number,
         required:true
-    } //total represents the total number o sales the has been done on that date up until that point
+    } //total represents the total number of sales the has been done on that date up until that point
 })
+
+module.exports=mongoose.model('Sales',salesSchema)

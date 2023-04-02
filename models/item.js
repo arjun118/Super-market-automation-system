@@ -3,26 +3,17 @@ const mongoose=require('mongoose')
 const Schema= mongoose.Schema
 
 const itemSchema=new Schema({
-    item_id:{
-        type:String,
-        required:true,
-        unique:true
-    },
     item_name:{
         type:String,
-        required:true
     },
-    stock:{
+    quantity:{
         type:Number,
-        required:true
     },
-    price:{
+    unit_price:{
         type:Number,
-        required:true
     },
     description:{
         type:String,
-        required:true
     }
 })
 

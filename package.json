@@ -19,11 +19,15 @@
   "homepage": "https://github.com/arjun118/Super-market-automation-system#readme",
   "dependencies": {
     "bootstrap-icons": "^1.10.3",
+    "connect-flash": "^0.1.1",
     "ejs": "^3.1.9",
     "ejs-mate": "^4.0.0",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "mongoose": "^7.0.2",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^8.0.0",
     "window": "^4.2.7"
   }
 }

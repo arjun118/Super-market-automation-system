@@ -165,6 +165,7 @@ app.get('/inventory',(req,res)=>{
 
 app.post('/bill',async(req,res)=>{
     var bill= req.body
+    console.log(bill)
     const date=new Date()
     bill.date=date
 
@@ -172,19 +173,29 @@ app.post('/bill',async(req,res)=>{
 
     for (let i = 0; i < bill.id.length; i++) {
         var q = await Item.find({_id:bill.id[i]})
-        q=q[0].quantity
-        const x = await Item.findOneAndUpdate({_id:bill.id[i]},{quantity:q-bill.qty[i]})
-        bill_items.push({item_ref:bill.id[i],
-        quantity:bill.qty[i],
-        cost:bill.total[i]})
+        // q=q[0].quantity
+        // const x = await Item.findOneAndUpdate({_id:bill.id[i]},{quantity:q-bill.qty[i]})
+        bill_items.push({
+            item_ref:bill.id[i],
+            name: q[0].item_name,
+            quantity:bill.qty[i],
+            unit_price:bill.price[i],
+            total_price:bill.total[i]
+        })
+        console.log(q)
     }
     // console.log(bill_items)
     
-    const new_bill = new Bill({customer_name:bill.customer_name,contact:bill.contact,
-    items:bill_items,
-    total_cost:bill.sub_total,
-    date:bill.date})
-    await new_bill.save();
+    const new_bill = new Bill({
+        // customer_name:bill.customer_name,contact:bill.contact,
+        items:bill_items,
+        total_cost:bill.sub_total,
+        date:bill.date
+    })
+    // await new_bill.save();
+
+    bill.id=await Bill.countDocuments();
+    bill.bill_items=bill_items
 
     // bill=JSON.stringify(bill)
 

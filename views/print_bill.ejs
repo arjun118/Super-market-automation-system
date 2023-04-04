@@ -1,5 +1,6 @@
 <% layout('layout/boiler_plate')%>
 
+
 <div style="margin: auto; ">
 <div id="printableArea">
 <style>
@@ -49,7 +50,7 @@ table tr td:last-child {
 }
 
 .client-name {
-  font-size: 1.5em;
+  font-size: 1.2em;
   vertical-align: top;
 }
 
@@ -113,29 +114,10 @@ table tr td:last-child {
   font-size: 1.125em;
 }
 
-.footer-thanks img {
-  display: inline-block;
-  position: relative;
-  top: 1px;
-  width: 16px;
-  margin-right: 4px;
-}
-
-.footer-info {
+.footer-thanks {
   float: right;
-  margin-top: 5px;
-  font-size: 0.75em;
-  color: #ccc;
 }
 
-.footer-info span {
-  padding: 0 5px;
-  color: black;
-}
-
-.footer-info span:last-child {
-  padding-right: 0;
-}
 
 .page-container {
   display: none;
@@ -150,107 +132,106 @@ table tr td:last-child {
   </div>
   
   <div class="logo-container">
-	<img
-	  style="height: 18px"
-	  src="https://app.useanvil.com/img/email-logo-black.png"
-	>
+	<h2>
+		SuperMarket
+	</h2>
   </div>
   
-  <table class="invoice-info-container">
+  <table class="invoice-info-container" style="text-align: left;">
 	<tr>
 	  <td rowspan="2" class="client-name">
-		Client Name
+		Invoice No: <strong><%=bill.id%></strong> 
 	  </td>
 	  <td>
-		Anvil Co
+		Automation Software
 	  </td>
 	</tr>
 	<tr>
 	  <td>
-		123 Main Street
+		SEL Project
 	  </td>
 	</tr>
 	<tr>
 	  <td>
-		Invoice Date: <strong>May 24th, 2024</strong>
+		Invoice Date: <strong><%=bill.date.toLocaleDateString()%></strong>
 	  </td>
 	  <td>
-		San Francisco CA, 94103
+		CSE Batch, 2024
 	  </td>
 	</tr>
 	<tr>
 	  <td>
-		Invoice No: <strong>12345</strong>
+		Invoice Time: <strong><%=bill.date.toLocaleTimeString()%></strong>
 	  </td>
 	  <td>
-		hello@useanvil.com
+		Group 10
 	  </td>
 	</tr>
+  </table>
+  
+  
+  <table class="line-items-container" style="text-align: left;">
+	<thead>
+	  <tr>
+		<th class="heading-quantity" style="width: 30%;">Code</th>
+		<th class="heading-description">Name</th>
+		<th class="heading-quantity">Quantity</th>
+		<th class="heading-price">Unit Price (Rs.)</th>
+		<th class="heading-price">Item Price (Rs.)</th>
+	  </tr>
+	</thead>
+	<tbody>
+		<%for (var i=0;i<bill.bill_items.length;i++){%>
+			<tr>
+				<td><%=bill.bill_items[i].item_ref%></td>
+				<td><%=bill.bill_items[i].name%></td>
+				<td style="text-align: center;"><%=bill.bill_items[i].quantity%></td>
+				<td style="text-align: center;"><%=bill.bill_items[i].unit_price%></td>
+				<td style="text-align: center;" class="bold"><%=bill.bill_items[i].total_price%></td>
+			</tr>
+		<%}%>
+	</tbody>
   </table>
   
   
   <table class="line-items-container">
 	<thead>
-	  <tr>
-		<th class="heading-quantity">Qty</th>
-		<th class="heading-description">Description</th>
-		<th class="heading-price">Price</th>
-		<th class="heading-subtotal">Subtotal</th>
-	  </tr>
+		<tr>
+		  <th>SubTotal</th>
+		</tr>
 	</thead>
 	<tbody>
-	  <tr>
-		<td>2</td>
-		<td>Blue large widgets</td>
-		<td class="right">$15.00</td>
-		<td class="bold">$30.00</td>
-	  </tr>
-	  <tr>
-		<td>4</td>
-		<td>Green medium widgets</td>
-		<td class="right">$10.00</td>
-		<td class="bold">$40.00</td>
-	  </tr>
-	  <tr>
-		<td>5</td>
-		<td>Red small widgets with logo</td>
-		<td class="right">$7.00</td>
-		<td class="bold">$35.00</td>
-	  </tr>
+		<tr>
+		  <td class="large">
+			 	Rs. <%=bill.sub_total%>
+		  </td>
+		</tr>
+		<tr>
+		  <td >
+			  <strong><%=bill.tax%> %</strong>
+		  </td>
+		</tr>
 	</tbody>
   </table>
-  
-  
+
   <table class="line-items-container has-bottom-border">
 	<thead>
 	  <tr>
 		<th>Payment Info</th>
-		<th>Due By</th>
 		<th>Total Due</th>
 	  </tr>
 	</thead>
 	<tbody>
 	  <tr>
-		<td class="payment-info">
-		  <div>
-			Account No: <strong>123567744</strong>
-		  </div>
-		  <div>
-			Routing No: <strong>120000547</strong>
-		  </div>
+		<td class="large">
+			Cash
 		</td>
-		<td class="large">May 30th, 2024</td>
-		<td class="large total">$105.00</td>
+		<td class="large total">Rs. <%=bill.total_amount%></td>
 	  </tr>
 	</tbody>
   </table>
   
   <div class="footer">
-	<div class="footer-info">
-	  <span>hello@useanvil.com</span> |
-	  <span>555 444 6666</span> |
-	  <span>useanvil.com</span>
-	</div>
 	<div class="footer-thanks">
 	  <span>Thank you!</span>
 	</div>

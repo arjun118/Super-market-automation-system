@@ -3,7 +3,7 @@
 
 <div style="margin: auto;">
     <form autocomplete="off" action="/bill" method="POST">
-    <h2>Customer Details</h2>
+    <!-- <h2>Customer Details</h2>
     <table class="table table-bordered table-hover" id="tab_customer">
         <tbody>
           <tr>
@@ -24,8 +24,9 @@
           </tr>
         </tbody>
       </table>
-    <br>
+    <br> -->
     <h2>Item Details</h2>
+    <br>
     <div class="row clearfix">
       <div class="col-md-12">
         <table class="table table-bordered table-hover" id="tab_logic">
@@ -46,10 +47,10 @@
               <td><input type="search" name='product[]'  placeholder='Enter Product Name' class="form-control" onkeyup="myfunc(this)"  required/>
                 <ul id="allItems0">
                     <%for (var i=0;i<items.length;i++){%>
-                        <li value="<%=items[i]._id%>" onclick="console.log(this.innerHTML); putitem(this,<%=JSON.stringify(items[i])%>)"><a href="#"><%=items[i].item_name%></a></li>
+                        <li value="<%=items[i]._id%>" onclick="putitem(this,<%=JSON.stringify(items[i])%>)"><a href="#"><%=items[i].item_name%></a></li>
                     <%}%>
                 </ul></td>
-              <td><input type="number" name='qty[]' value="0" placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
+              <td><input type="number" name='qty[]' value="0" placeholder='Enter Qty' class="form-control qty" step="1" min="0"/></td>
               <td><input type="number" name='price[]' placeholder='Unit Price' class="form-control price" readonly/></td>
               <td><input type="number" name='total[]' placeholder='0.00' class="form-control total" readonly/></td>
               
@@ -65,6 +66,8 @@
         <button type="button" id='delete_row' class="pull-right btn btn-outline-danger">Delete Row</button>
       </div>
     </div>
+
+    <br>
     
     <div class="row clearfix" style="margin-top:20px">
       <div class="pull-right col-md-4">
@@ -77,7 +80,7 @@
             <tr>
               <th class="text-center">Tax</th>
               <td class="text-center"><div class="input-group mb-2 mb-sm-0">
-                  <input type="number" class="form-control" id="tax" placeholder="0">
+                  <input type="number" class="form-control" id="tax" name="tax" placeholder="0">
                   <div class="input-group-addon">%</div>
                 </div></td>
             </tr>
@@ -93,8 +96,11 @@
         </table>
       </div>
     </div>
+    <br>
     <button type="submit button" class="btn btn-lg btn-primary">Create Bill</button>
+    <br>
 </form>
+<br>
   </div>
 
 

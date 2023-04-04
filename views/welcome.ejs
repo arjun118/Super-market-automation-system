@@ -1,0 +1,34 @@
+<% layout('layout/boiler_plate')%>
+
+<h1>Welcome to <%=currentUser.user_type%> view</h1>
+<br>
+<div class="text-center" style="align-items: center; justify-content: center; margin-left: 30%;">
+    <ul class="job">
+        <p>The <%=currentUser.user_type%> has access to:</p>
+        <% if (currentUser.user_type == "Manager"){ %>
+        <li class="job">View the sales statistics</li>
+        <li class="job">View Inventory</li>
+        <li class="job">Change price of items</li>
+        <li class="job">Order items from supplier</li>
+        <% } %>
+        <% if (currentUser.user_type == "Clerk"){ %>
+        <li class="job">Scan and enter items from customer's cart</li>
+        <li class="job">Print bill after payment</li>
+        <% } %>
+        <% if (currentUser.user_type == "Staff"){ %>
+        <li class="job">Add items after delivery from supplier</li>
+        <li class="job">Delete damaged items from inventory</li>
+        <% } %>
+    </ul>
+    
+    <style>
+    .job{
+        list-style: disc;
+        padding: 8px 20px;
+        width: auto;
+        text-align: left;
+        list-style-position: inside;
+    }
+    </style>
+    
+</div>

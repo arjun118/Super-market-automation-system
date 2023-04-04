@@ -55,6 +55,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req,res,next)=>{
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
@@ -65,8 +66,8 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/makeuser',async(req,res)=>{
-    const user = new User({name:'chan',user_type:'Manager',username:'chan'});
-    const newuser = await User.register(user,'chan');
+    const user = new User({name:'staff',user_type:'Staff',username:'staff'});
+    const newuser = await User.register(user,'staff');
     res.send(newuser);
 })
 
@@ -89,15 +90,36 @@ app.get('/stat',async (req,res)=>{
     const sales={data}
     res.render('sales_stat',{sales})
 })
+
 app.get('/login',(req,res)=>{
     res.render('login')
+})
+app.get('/logout',async(req,res)=>{
+    req.logout(req.user, err => {
+        if(err) return next(err);
+        req.flash('success', "Goodbye!");
+        res.redirect('/login');
+      });
 })
 app.get('/register',(req,res)=>{
     res.render('register')
 })
-app.get('/bill',isLoggedIn,async(req,res)=>{
+
+app.get('/bill',async(req,res)=>{
     const items = await Item.find({})
     res.render('bill',{items})
+})
+
+app.get('/profile',async(req,res)=>{
+    res.render('profile')
+})
+
+app.get('/about',async(req,res)=>{
+    res.render('about')
+})
+
+app.get('/welcome',async(req,res)=>{
+    res.render('welcome')
 })
 
 
@@ -158,7 +180,7 @@ app.post('/register',async(req,res)=>{
 
 app.post('/login',passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }),async(req,res)=>{
     req.flash('success', 'welcome back!');
-    res.redirect('/bill')
+    res.redirect('/welcome')
 })
 
 app.listen(3000,()=>{

@@ -1,0 +1,29 @@
+<% layout('layout/boiler_plate')%>
+
+<h1>Profile</h1>
+<br>
+<%=console.log(currentUser)%>
+<div class="text-center" style="align-items: center; justify-content: center; margin-left: 30%;">
+    <ul class="job">
+        <li>
+            Name: <%=currentUser.name%>
+        </li>
+        <li>
+            Type of user: <%=currentUser.user_type%>
+        </li>
+        <li>
+            User name: <%=currentUser.username%>
+        </li>
+    </ul>
+    
+    <style>
+    .job{
+        list-style: disc;
+        padding: 8px 20px;
+        width: auto;
+        text-align: left;
+        list-style-position: inside;
+    }
+    </style>
+    
+</div>

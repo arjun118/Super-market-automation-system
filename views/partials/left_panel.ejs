@@ -4,55 +4,43 @@
             <span class="fs-5 d-none d-sm-inline">SuperMarket</span>
         </a>
     </div>
+    <hr width="100%" color="green" />
+
     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-        <!-- <li class="nav-item">
-            <a href="#" class="nav-link align-middle px-0">
-                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link px-0 align-middle">
-                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link px-0 align-middle">
-                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> 
-            </a>
-        </li> -->
         <li>
             <a href="/welcome" class="nav-link px-0 align-middle">
                 <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Home</span> 
             </a>
-            </li>
-            <% if (currentUser.user_type == "Manager"){%>
+        </li>
+
+        <% if (currentUser.user_type == "Manager"){%>
             <li>
                 <a href="/stat" class="nav-link px-0 align-middle">
                     <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Sales Statistics</span>
                 </a>
             </li>
-            <% } %>
-            <% if (currentUser.user_type != "Clerk"){ %>
+        <% } %>
+        <% if (currentUser.user_type != "Clerk"){ %>
             <li>
                 <a href="/inventory" class="nav-link px-0 align-middle">
                     <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Inventory</span>
                 </a>
             </li>
-            <% } %>
-            <!-- <% if (currentUser.user_type == "Manager"){ %>
+        <% } %>
+        <!-- <% if (currentUser.user_type == "Manager"){ %>
             <li>
                 <a href="/order" class="nav-link px-0 align-middle">
                     <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Order Items</span>
                 </a>
             </li>
-            <% } %> -->
-            <% if (currentUser.user_type == "Clerk"){ %>
+        <% } %> -->
+        <% if (currentUser.user_type == "Clerk"){ %>
             <li>
                 <a href="/bill" class="nav-link px-0 align-middle">
-                    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Bill</span>
+                    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Generate Bill</span>
                 </a>
             </li>
-            <% } %>
+        <% } %>
             <li>
                 <a href="/about" class="nav-link px-0 align-middle">
                     <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">About</span>

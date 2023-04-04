@@ -71,7 +71,46 @@ app.get('/makeuser',async(req,res)=>{
     res.send(newuser);
 })
 
-app.get('/stat',async (req,res)=>{
+app.get('/login',(req,res)=>{
+    res.render('login')
+})
+
+app.post('/login',passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }),async(req,res)=>{
+    req.flash('success', 'Welcome back!');
+    res.redirect('/welcome')
+})
+
+app.get('/logout',async(req,res)=>{
+    req.logout(req.user, err => {
+        if(err) return next(err);
+        req.flash('success', "Goodbye!");
+        res.redirect('/login');
+      });
+})
+
+app.get('/register',(req,res)=>{
+    res.render('register')
+})
+
+app.post('/register',async(req,res)=>{
+    try {
+        const {name,username,user_type,password}=req.body
+        joining_date=Date.now()
+        const user = new User({name,user_type,joining_date,username});
+        const newuser = await User.register(user,password);
+        req.login(newuser, err => {
+            if (err) return next(err);
+            req.flash('success', 'Welcome new user!');
+            res.redirect('/welcome');
+        })
+    } catch (e) {
+        req.flash('error', e.message);
+        res.redirect('register');
+    }
+})
+
+
+app.get('/stat',isLoggedIn,async (req,res)=>{
     const data=await Sales.aggregate([
         {
             $group: {
@@ -91,34 +130,20 @@ app.get('/stat',async (req,res)=>{
     res.render('sales_stat',{sales})
 })
 
-app.get('/login',(req,res)=>{
-    res.render('login')
-})
-app.get('/logout',async(req,res)=>{
-    req.logout(req.user, err => {
-        if(err) return next(err);
-        req.flash('success', "Goodbye!");
-        res.redirect('/login');
-      });
-})
-app.get('/register',(req,res)=>{
-    res.render('register')
-})
-
-app.get('/bill',async(req,res)=>{
+app.get('/bill',isLoggedIn,async(req,res)=>{
     const items = await Item.find({})
     res.render('bill',{items})
 })
 
-app.get('/profile',async(req,res)=>{
+app.get('/profile',isLoggedIn,async(req,res)=>{
     res.render('profile')
 })
 
-app.get('/about',async(req,res)=>{
+app.get('/about',isLoggedIn,async(req,res)=>{
     res.render('about')
 })
 
-app.get('/welcome',async(req,res)=>{
+app.get('/welcome',isLoggedIn,async(req,res)=>{
     res.render('welcome')
 })
 
@@ -167,20 +192,6 @@ app.post('/bill',async(req,res)=>{
 
     // res.send(req.body)
 
-})
-
-
-app.post('/register',async(req,res)=>{
-    
-    const {name,username,user_type,password}=req.body
-    const user = new User({name,user_type,username});
-    const newuser = await User.register(user,password);
-    res.send(newuser);
-})
-
-app.post('/login',passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }),async(req,res)=>{
-    req.flash('success', 'welcome back!');
-    res.redirect('/welcome')
 })
 
 app.listen(3000,()=>{

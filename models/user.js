@@ -13,6 +13,10 @@ const UserSchema = new Schema({
         required: true,
         enum : ['Manager','Clerk','Staff'],
         default: 'Manager'
+    },
+    joining_date: {
+        type:Date,
+        required: true
     }
 });
 

@@ -173,8 +173,8 @@ app.post('/bill',async(req,res)=>{
 
     for (let i = 0; i < bill.id.length; i++) {
         var q = await Item.find({_id:bill.id[i]})
-        // q=q[0].quantity
-        // const x = await Item.findOneAndUpdate({_id:bill.id[i]},{quantity:q-bill.qty[i]})
+        q=q[0].quantity
+        const x = await Item.findOneAndUpdate({_id:bill.id[i]},{quantity:q-bill.qty[i]})
         bill_items.push({
             item_ref:bill.id[i],
             name: q[0].item_name,

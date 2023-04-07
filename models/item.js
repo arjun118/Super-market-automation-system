@@ -6,6 +6,9 @@ const itemSchema=new Schema({
     item_name:{
         type:String,
     },
+    item_code:{
+        type:Number,
+    },
     quantity:{
         type:Number,
     },

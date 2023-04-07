@@ -153,17 +153,18 @@ app.get('/print',(req,res)=>{
 })
 
 app.get('/additem',async(req,res)=>{
-    const item = new Item({item_name:"toy",quantity:"5",unit_price:"100",description:"kids"})
+    const item = new Item({item_name:"vegetable",item_code:await Item.countDocuments()+1,quantity:"40",unit_price:"50",description:"grocery"})
     await item.save();
     res.send(item)
 })
 
 
-app.get('/inventory',(req,res)=>{
+app.get('/inventory',isLoggedIn,(req,res)=>{
     res.render('inventory')
 })
 
-app.post('/bill',async(req,res)=>{
+app.post('/bill',isLoggedIn,async(req,res)=>{
+    // return res.send(req.body)
     var bill= req.body
     console.log(bill)
     const date=new Date()
@@ -171,12 +172,11 @@ app.post('/bill',async(req,res)=>{
 
     var bill_items=[]
 
-    for (let i = 0; i < bill.id.length; i++) {
-        var q = await Item.find({_id:bill.id[i]})
-        q=q[0].quantity
-        const x = await Item.findOneAndUpdate({_id:bill.id[i]},{quantity:q-bill.qty[i]})
+    for (let i = 0; i < bill.code.length; i++) {
+        var q = await Item.find({item_code:bill.code[i]})
+        const x = await Item.findOneAndUpdate({item_code:bill.code[i]},{quantity:q[0].quantity-bill.qty[i]})
         bill_items.push({
-            item_ref:bill.id[i],
+            item_ref:bill.code[i],
             name: q[0].item_name,
             quantity:bill.qty[i],
             unit_price:bill.price[i],

@@ -1,8 +1,8 @@
 <% layout('layout/boiler_plate')%>
 
 
-<div style="margin: auto; ">
-<div id="printableArea">
+<div id="printableArea" style="margin: auto; ">
+<div style="padding: 5%;" class="text-center" >
 <style>
 body {
   font-size: 16px;
@@ -131,8 +131,8 @@ table tr td:last-child {
 	<span class="pages"></span>
   </div>
   
-  <div class="logo-container">
-	<h2>
+  <div class="logo-container text-center">
+	<h2 style="text-align: center;">
 		SuperMarket
 	</h2>
   </div>
@@ -173,7 +173,7 @@ table tr td:last-child {
   <table class="line-items-container" style="text-align: left;">
 	<thead>
 	  <tr>
-		<th class="heading-quantity" style="width: 30%;">Code</th>
+		<th class="heading-quantity" style="width: 20%;">Code</th>
 		<th class="heading-description">Name</th>
 		<th class="heading-quantity">Quantity</th>
 		<th class="heading-price">Unit Price (Rs.)</th>
@@ -208,7 +208,7 @@ table tr td:last-child {
 		</tr>
 		<tr>
 		  <td >
-			  <strong><%=bill.tax%> %</strong>
+			  Tax: <strong><%=bill.tax%> %</strong>
 		  </td>
 		</tr>
 	</tbody>
@@ -238,9 +238,9 @@ table tr td:last-child {
   </div>
 </div>
 <br>
-<div class="text-center">
-	<input type="button" class="btn btn-info btn-lg" onclick="printDiv('printableArea')" value="Print" />
 </div>
+<div class="text-center" style="padding-bottom: 5%;">
+	<input type="button" class="btn btn-info btn-lg" onclick="printDiv('printableArea')" value="Print" />
 </div>
 <script>
 	window.onload=printDiv('printableArea');

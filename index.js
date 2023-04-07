@@ -192,7 +192,7 @@ app.post('/bill',async(req,res)=>{
         total_cost:bill.sub_total,
         date:bill.date
     })
-    // await new_bill.save();
+    await new_bill.save();
 
     bill.id=await Bill.countDocuments();
     bill.bill_items=bill_items

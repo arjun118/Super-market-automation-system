@@ -155,12 +155,11 @@ app.get('/print',(req,res)=>{
 app.get('/additem',async(req,res)=>{
     const item = new Item({item_name:"toy",quantity:"5",unit_price:"100",description:"kids"})
     await item.save();
-    res.send(item)
 })
 
-
-app.get('/inventory',(req,res)=>{
-    res.render('inventory')
+app.get('/inventory',isLoggedIn,async(req,res)=>{
+    const allDetails = await Item.find({});
+    res.render('inventory', { details: allDetails })
 })
 
 app.post('/bill',async(req,res)=>{
@@ -203,6 +202,11 @@ app.post('/bill',async(req,res)=>{
 
     // res.send(req.body)
 
+})
+
+app.post('/add',async(req,res)=>{
+    
+    res.send(req.body)
 })
 
 app.listen(3000,()=>{

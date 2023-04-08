@@ -9,6 +9,14 @@
     u = document.getElementById("ci5");
     u.value=id.quantity
   }
+  $(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
 </script>
 
 
@@ -20,7 +28,9 @@
     </button>
     <%}%>
     <br><br>
-    <table class="table table-dark" id="item_table">
+    <input class="form-control border border-primary" id="myInput" type="text" placeholder="Search..">
+    <br><br>
+    <table  class="table table-dark table table-striped table-bordered table-sm">
         <thead>
           <th>Product Id</th>
           <th>Product name</th>
@@ -29,6 +39,7 @@
           <th>Quantity</th>
           <th>Update</th>
         </thead>
+        <tbody id="myTable">
           <% details.forEach(function(item,index){ %>
           <tr>
               <td><%= item.item_code %></td>
@@ -43,7 +54,7 @@
               </td>
           </tr>
           <% }) %>
-
+        </tbody>
       </table>
 
 <!-- Update Modal -->

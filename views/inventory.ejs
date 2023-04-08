@@ -10,13 +10,13 @@
     u.value=id.quantity
   }
   $(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
     });
   });
-});
 </script>
 
 
@@ -27,8 +27,8 @@
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addItem">
       Add Item
     </button>
-    <%}%>
     <br><br>
+    <%}%>
     <input class="form-control border border-primary" id="myInput" type="text" placeholder="Search..">
     <br><br>
     <table  class="table table-dark table table-striped table-bordered table-sm">
@@ -51,7 +51,7 @@
               <td><%= item.unit_price %></td>
               <td><%= item.quantity %></td>
               <td>
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ex1" onclick="fun(event,<%=JSON.stringify(item)%>);">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ex1" onclick="fun(<%=JSON.stringify(item)%>);">
                     Edit
                 </button>
               </td>
@@ -76,6 +76,7 @@
 
             <div class="modal-body">
                 <input type="text" id="ci1" value="" name="i1"class="form-control" hidden ><br>
+
                 <% if (currentUser.user_type == "Manager"){ %>
                   <label class="col-sm-2 col-form-label" for="ai3">MRP</label>
                   <input type="number" id="ci4" value="" min="0" name="i3" ><br>

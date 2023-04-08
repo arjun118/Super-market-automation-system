@@ -16,23 +16,29 @@
 </script>
 
 
-<div class="text-center">
+<div class="text-center" style="margin: auto;" >
     <h1>Inventory</h1>
+    <br>
     <% if (currentUser.user_type == "Manager"){ %>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addItem">
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addItem">
       Add Item
     </button>
     <%}%>
-    <br><br>
-    <table class="table table-dark" id="item_table">
+    <br>
+    <br>
+
+    <table class="table table-bordered table-hover" id="item_table">
         <thead>
+          <tr>
           <th>Product Id</th>
           <th>Product name</th>
           <th>Description</th>
           <th>MRP</th>
           <th>Quantity</th>
           <th>Update</th>
+        </tr>
         </thead>
+        <tbody>
           <% details.forEach(function(item,index){ %>
           <tr>
               <td><%= item.item_code %></td>
@@ -41,14 +47,16 @@
               <td><%= item.unit_price %></td>
               <td><%= item.quantity %></td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ex1" onclick="fun(event,<%=JSON.stringify(item)%>);">
-                    Change
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ex1" onclick="fun(event,<%=JSON.stringify(item)%>);">
+                    Edit
                 </button>
               </td>
           </tr>
           <% }) %>
+        </tbody>
 
       </table>
+      
 
 <!-- Update Modal -->
       <div class="modal fade" id="ex1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -66,11 +74,11 @@
                 <input type="text" id="ci1" value="" name="i1"class="form-control" hidden ><br>
                 <% if (currentUser.user_type == "Manager"){ %>
                   <label class="col-sm-2 col-form-label" for="ai3">MRP</label>
-                  <input type="number" id="ci4" value="" name="i3" ><br>
+                  <input type="number" id="ci4" value="" min="0" name="i3" ><br>
                 <%}%>
                 <% if (currentUser.user_type == "Staff"){ %>
                 <label class="col-sm-2 col-form-label" for="ai4">Quantity</label>
-                <input type="number" id="ci5" value="" name="i4" ><br>
+                <input type="number" id="ci5" value="" min="0" name="i4" ><br>
                 <%}%>
             </div>
             <div class="modal-footer">

@@ -1,11 +1,7 @@
 <% layout('layout/boiler_plate') %>
 
 <script type="text/javascript" >
-  var x=0;
-  function fun(event,id){
-
-    let w=event.target.parentNode.parentNode.children;
-    console.log(w[3].innerHTML);
+  function fun(id){
     u = document.getElementById("ci1");
     u.value=id.item_code
     u = document.getElementById("ci4");
@@ -41,7 +37,7 @@
               <td><%= item.unit_price %></td>
               <td><%= item.quantity %></td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ex1" onclick="fun(event,<%=JSON.stringify(item)%>);">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ex1" onclick="fun(<%=JSON.stringify(item)%>);">
                     Change
                 </button>
               </td>
@@ -54,6 +50,7 @@
       <div class="modal fade" id="ex1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
+
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLongTitle">Make Changes</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -61,8 +58,8 @@
               </button>
             </div>
             <form action="/updateItems" method="POST">
-              <div class="modal-body">
-                <!-- <label class="col-sm-2 col-form-label" for="ai1">Item Code</label> -->
+
+            <div class="modal-body">
                 <input type="text" id="ci1" value="" name="i1"class="form-control" hidden ><br>
                 <% if (currentUser.user_type == "Manager"){ %>
                   <label class="col-sm-2 col-form-label" for="ai3">MRP</label>
@@ -73,10 +70,12 @@
                 <input type="number" id="ci5" value="" name="i4" ><br>
                 <%}%>
             </div>
+
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="button submit" class="btn btn-primary">Save changes</button>
             </div>
+
           </form>
           </div>
         </div>
@@ -86,12 +85,14 @@
       <div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
           <div class="modal-content">
+
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLongTitle">Add Item</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+
             <form action="/add" method="POST">
 
             <div class="modal-body">
@@ -104,10 +105,12 @@
                 <label class="col-sm-2 col-form-label" for="ai4">Quantity</label>
                 <input type="number" id="ai4" value="" name="i4" required ><br>
             </div>
+
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="button submit" class="btn btn-primary">Add</button>
             </div>
+
           </form>
 
           </div>

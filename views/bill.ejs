@@ -47,7 +47,7 @@
               <td><input type="search" name='product[]'  placeholder='Enter Product Name' class="form-control" onkeyup="myfunc(this)"  required/>
                 <ul id="allItems0">
                     <%for (var i=0;i<items.length;i++){%>
-                        <li value="<%=items[i]._id%>" onclick="putitem(this,<%=JSON.stringify(items[i])%>)"><a href="#"><%=items[i].item_name%></a></li>
+                        <li style="text-align: left;" value="<%=items[i]._id%>" onclick="putitem(this,<%=JSON.stringify(items[i])%>)"><a href="#"><%=items[i].item_name%></a></li>
                     <%}%>
                 </ul></td>
               <td><input type="number" name='qty[]' value="0" placeholder='Enter Qty' class="form-control qty" step="1" min="0"/></td>

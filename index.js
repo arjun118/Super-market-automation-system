@@ -162,9 +162,9 @@ app.get('/additem',async(req,res)=>{
     res.send(res.locals.currentUser.user_type)
 })
 
-
-app.get('/inventory',isLoggedIn,(req,res)=>{
-    res.render('inventory')
+app.get('/inventory',isLoggedIn,async(req,res)=>{
+    const allDetails = await Item.find({});
+    res.render('inventory', { details: allDetails })
 })
 
 app.post('/bill',isLoggedIn,async(req,res)=>{
@@ -211,6 +211,11 @@ app.post('/bill',isLoggedIn,async(req,res)=>{
 
     // res.send(req.body)
 
+})
+
+app.post('/add',async(req,res)=>{
+    
+    res.send(req.body)
 })
 
 app.listen(3000,()=>{

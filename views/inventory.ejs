@@ -1,13 +1,14 @@
-<% layout('layout/boiler_plate')%>
+<% layout('layout/boiler_plate') %>
 
 <script type="text/javascript">
   let x;
   let y;
-  let z=4;
-    function fun(id1,id2){
-      x=document.getElementById(id1);
-      y=document.getElementById(id2);
+  
+    function fun(event){
+      let w=event.target.parentNode.parentNode.children;
+      x=w[3];y=w[4];
     }
+
     function fillValue(x1,x2){
         const val1=document.getElementById(x1).value
         if(val1!==''){
@@ -20,6 +21,7 @@
           document.getElementById(x2).value=''
         }
     }
+
     function addItem(ai0,ai1,ai2,ai3,ai4){
       let itemTable = document.getElementById('item_table');
       let row = itemTable.insertRow(-1);
@@ -27,11 +29,8 @@
       let c1 = row.insertCell(1);
       let c2 = row.insertCell(2);
       let c3 = row.insertCell(3);
-      c3.setAttribute('id','p'+z.toString());
       let c4 = row.insertCell(4);
-      c4.setAttribute('id','q'+z.toString());
       let c5 = row.insertCell(5);
-
 
       let id = document.getElementById(ai0);
       let productName = document.getElementById(ai1);
@@ -51,16 +50,13 @@
       button.setAttribute("class","btn btn-primary");
       button.setAttribute("data-toggle","modal");
       button.setAttribute("data-target","#ex1");
-      button.setAttribute("onclick",`fun('${'p'+ z.toString()}','${'q'+z.toString()}')`);
-
-      console.log(button);
+      button.setAttribute("onclick","fun(event)");
       c5.appendChild(button);
-      
       id.value='';productName.value='';description.value='';mrp.value='';quantity.value='';
-      z++;
+      
    }
-
 </script>
+
 
 <div class="text-center">
     <h1>Inventory</h1>
@@ -72,47 +68,26 @@
         <thead>
           <th>Product Id</th>
           <th>Product name</th>
-          <th>Description   </th>
+          <th>Description</th>
           <th>MRP</th>
           <th>Quantity</th>
           <th>Update</th>
         </thead>
-        <tr>
-          <td>1</td>
-          <td>Iodex</td>  
-          <td>Dabur</td>
-          <td id="p1">15</td>
-          <td id="q1">500</td>
-          <td>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ex1" onclick="fun('p1','q1')">
-                Change
-            </button>
-          </td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Sugar</td>  
-            <td>Reliance 10KG</td>
-            <td id="p2">500</td>
-            <td id="q2">100</td>
-            <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ex1" onclick="fun('p2','q2')">
+          <% details.forEach(function(item,index){ %>
+          <tr>
+              <td>100</td>
+              <td><%= item.item_name %></td>
+              <td><%= item.description %></td>
+              <td><%= item.unit_price %></td>
+              <td><%= item.quantity %></td>
+              <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ex1" onclick="fun(event)">
                     Change
                 </button>
-            </td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Rice</td>  
-            <td>India gate 1KG</td>
-            <td id="p3">100</td>
-            <td id="q3">500</td>
-            <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ex1" onclick="fun('p3','q3')">
-                    Change
-                </button>
-            </td>
-        </tr>
+              </td>
+          </tr>
+          <% }) %>
+
       </table>
 
 <!-- Update Modal -->
@@ -127,7 +102,7 @@
             </div>
             <div class="modal-body">
     
-              <form >
+              <form  >
                 <label class="col-sm-2 col-form-label">MRP</label>
                 <input type="text" id="s1" value=""><br>
                 <label class="col-sm-2 col-form-label">Quantity</label>
@@ -154,31 +129,31 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+            <form action="/add" method="POST">
+
             <div class="modal-body">
     
-              <form >
                 <label class="col-sm-2 col-form-label" for="ai0">Product Id</label>
-                <input type="text" id="ai0" value="" ><br>
+                <input type="text" id="ai0" value="" name="i" ><br>
                 <label class="col-sm-2 col-form-label" for="ai1">Product Name</label>
-                <input type="text" id="ai1" value="" ><br>
+                <input type="text" id="ai1" value="" name="i1"  ><br>
                 <label class="col-sm-2 col-form-label" for="ai2">Description</label>
-                <input type="text" id="ai2" value=""><br>
+                <input type="text" id="ai2" value="" name="i2" ><br>
                 <label class="col-sm-2 col-form-label" for="ai3">MRP</label>
-                <input type="number" id="ai3" value=""><br>
+                <input type="number" id="ai3" value="" name="i3" ><br>
                 <label class="col-sm-2 col-form-label" for="ai4">Quantity</label>
-                <input type="number" id="ai4" value=""><br>
-              </form>
+                <input type="number" id="ai4" value="" name="i4" ><br>
     
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal" 
-              onclick="addItem('ai0','ai1','ai2','ai3','ai4')">Add</button>
+              <button type="button submit" class="btn btn-primary" 
+              >Add</button>
             </div>
+          </form>
+
           </div>
         </div>
       </div>
-
-
 </div>
     

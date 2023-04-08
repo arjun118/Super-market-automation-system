@@ -131,6 +131,10 @@ app.get('/stat',isLoggedIn,async (req,res)=>{
 })
 
 app.get('/bill',isLoggedIn,async(req,res)=>{
+    if(res.locals.currentUser.user_type!='Clerk'){
+        req.flash('error', 'Only Sales Clerk is authorized for this action');
+        res.redirect('/welcome');
+    }
     const items = await Item.find({})
     res.render('bill',{items})
 })
@@ -153,9 +157,9 @@ app.get('/print',(req,res)=>{
 })
 
 app.get('/additem',async(req,res)=>{
-    const item = new Item({item_name:"vegetable",item_code:await Item.countDocuments()+1,quantity:"40",unit_price:"50",description:"grocery"})
-    await item.save();
-    res.send(item)
+    // const item = new Item({item_name:"vegetable",item_code:await Item.countDocuments()+1,quantity:"40",unit_price:"50",description:"grocery"})
+    // await item.save();
+    res.send(res.locals.currentUser.user_type)
 })
 
 
@@ -164,6 +168,10 @@ app.get('/inventory',isLoggedIn,(req,res)=>{
 })
 
 app.post('/bill',isLoggedIn,async(req,res)=>{
+    if(res.locals.currentUser.user_type!='Clerk'){
+        req.flash('error', 'Only Sales Clerk is authorized for this action');
+        res.redirect('/welcome');
+    }
     // return res.send(req.body)
     var bill= req.body
     console.log(bill)

@@ -1,81 +1,107 @@
 <% layout('layout/boiler_plate')%>
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script
+  type="text/javascript"
+  src="https://www.gstatic.com/charts/loader.js"
+></script>
 
-    <script type="text/javascript">
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
-        ]);
+<script type="text/javascript">
+  google.charts.load("current", { packages: ["corechart"] });
+  google.charts.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ["name", "number_of_quantity"],
 
-        var options = {
-          title: 'My Daily Activities',
-          is3D: true,
-        };
+      <% for(var i=0; i<newdata.length; i++) {%>
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-        chart.draw(data, options);
-      }
-    </script>   
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['bar']});
-        google.charts.setOnLoadCallback(drawChart);
-  
-        function drawChart() {
-          var data = google.visualization.arrayToDataTable([
-            ['Year', 'Sales', 'Expenses', 'Profit'],
-            ['2014', 1000, 400, 200],
-            ['2015', 1170, 460, 250],
-            ['2016', 660, 1120, 300],
-            ['2017', 1030, 540, 350]
-          ]);
-  
-          var options = {
-            chart: {
-              title: 'Company Performance',
-              subtitle: 'Sales, Expenses, and Profit: 2014-2017',
-            }
-          };
-  
-          var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
-  
-          chart.draw(data, google.charts.Bar.convertOptions(options));
-        }
-      </script> 
+          [`<%= newdata[i].item_name %>`, <%= newdata[i].total_sale %>],
 
-    
-    <div class="total">
-      <h1>Stat</h1>
-      <div class="first" id="piechart_3d"></div>
-      <div class="second" id="columnchart_material"></div>
-    </div>
-    <style>
-      .first {
-          width: auto;
-          height: 500px;
-          display: inline-block;
-      }
-      .second {
-          width: auto;
-          height: 500px;
-          display: inline-block;
-      }
+        <% } %>
 
-      @media screen and (max-width: 500px) {
 
-          .first,
-          .second {
-              width: auto;
-          }
-          .total{
-            flex-direction: column;
-          }
-      }
-  </style>
+    ]);
+
+    var options = {
+      title: "My Daily Activities",
+      is3D: true,
+    };
+
+    var chart = new google.visualization.PieChart(
+      document.getElementById("piechart_3d")
+    );
+    chart.draw(data, options);
+  }
+</script>
+<script type="text/javascript">
+  google.charts.load("current", { packages: ["bar"] });
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    let arr = new Array(13); for (let i=0; i<13; ++i) arr[i] = 0;
+    let arr1= new Array(13); for (let i=0; i<13; ++i) arr1[i] = 0;
+
+         <% for(var j=0; j<monthSales.length; j++) {%>
+           arr[ <%= monthSales[j].month %> ] = arr[<%= monthSales[j].month %> ] +  <%= monthSales[j].total_sale %> ;
+           arr1[ <%= monthSales[j].month %> ] = arr1[<%= monthSales[j].month %> ] +  <%= monthSales[j].total_sale %>/<%= monthSales[j].unit_price %> ;
+
+           <% } %>
+
+    var data = google.visualization.arrayToDataTable([
+      ["Month", "₹ Sales ","Quantity"],
+
+      ["1", arr[1],arr1[1]],
+      ["2", arr[2],arr1[2]],
+      ["3", arr[3],arr1[3]],
+      ["4", arr[4],arr1[4]],
+      ["5", arr[5],arr1[5]],
+      ["6", arr[6],arr1[6]],
+      ["7",arr[7],arr1[7]],
+      ["8", arr[8],arr1[8]],
+      ["9", arr[9],arr1[9]],
+      ["10",arr[10],arr1[10]],
+      ["11", arr[11],arr1[11]],
+      ["12",arr[12],arr1[12]],
+    ]);
+
+    var options = {
+      chart: {
+        title: "Company Performance",
+        subtitle: "Sales Quantity",
+      },
+    };
+
+    var chart = new google.charts.Bar(
+      document.getElementById("columnchart_material")
+    );
+
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+  }
+</script>
+
+<div class="total">
+  <h1>Stat</h1>
+  <div class="first" id="piechart_3d"></div>
+  <div class="second" id="columnchart_material"></div>
+</div>
+<style>
+  .first {
+    width: auto;
+    height: 500px;
+    display: block;
+  }
+  .second {
+    width: auto;
+    height: 500px;
+    display: block;
+  }
+
+  @media screen and (max-width: 500px) {
+    .first,
+    .second {
+      width: auto;
+    }
+    .total {
+      flex-direction: column;
+    }
+  }
+</style>

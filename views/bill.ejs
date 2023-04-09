@@ -44,13 +44,13 @@
             <tr id='addr0'>
               <td>1</td>
               <td><input type="text" name='code[]' placeholder='#' class="form-control id" readonly/></td>
-              <td><input type="search" name='product[]'  placeholder='Enter Product Name' class="form-control" onkeyup="myfunc(this)"  required/>
-                <ul id="allItems0">
+              <td><input type="search" name='product[]'  placeholder='Enter Product Name' class="form-control" oninput="myfunc(this)"  required/>
+                <ul class="dropdownitems" id="allItems0">
                     <%for (var i=0;i<items.length;i++){%>
                         <li style="text-align: left;" value="<%=items[i]._id%>" onclick="putitem(this,<%=JSON.stringify(items[i])%>)"><a href="#"><%=items[i].item_name%></a></li>
                     <%}%>
                 </ul></td>
-              <td><input type="number" name='qty[]' value="0" placeholder='Enter Qty' class="form-control qty" step="1" min="0"/></td>
+              <td><input type="number" name='qty[]' value="0" max="0" placeholder='Enter Qty' class="form-control qty" step="1" min="0"/></td>
               <td><input type="number" name='price[]' placeholder='Unit Price' class="form-control price" readonly/></td>
               <td><input type="number" value="0" name='total[]' placeholder='0.00' class="form-control total" readonly/></td>
               
@@ -103,6 +103,12 @@
 <br>
   </div>
 
+<style>
+  .dropdownitems{
+    max-height:30vh;
+   overflow:auto; 
+  }
+</style>
 
   <script>
     $(document).ready(function(){
@@ -165,6 +171,15 @@ function myfunc(y)
 {
     x=y.parentElement.parentElement.id
     x=x.substring(4)
+
+    z=document.getElementById("addr"+x)
+    z.children[1].children[0].value='#'
+    // console.log(input.children[2].children[0])
+    z.children[3].children[0].value=0
+    z.children[3].children[0].max=0
+    z.children[4].children[0].value=''
+    z.children[5].children[0].value=0
+
     var input, filter, ul, li, a, i, txtValue;
     input = y;
     filter = input.value.toUpperCase();

@@ -64,15 +64,7 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-app.get("/makeuser", async (req, res) => {
-  const user = new User({
-    name: "staff",
-    user_type: "Staff",
-    username: "staff",
-  });
-  const newuser = await User.register(user, "staff");
-  res.send(newuser);
-});
+// authentications
 
 app.get("/login", (req, res) => {
   res.render("login");
@@ -127,16 +119,45 @@ app.get("/stat", isLoggedIn, async (req, res) => {
   try {
     const newdata = await Sales.find({});
 
-    const monthSales = await Sales.aggregate([
-      {
-        $project: {
-          unit_price: 1,
-          total_sale: 1,
-          month: {
-            $month: {
-              date: "$timestamp",
-            },
-          },
+//common
+
+app.get('/profile',isLoggedIn,async(req,res)=>{
+    res.render('profile')
+})
+
+app.get('/about',isLoggedIn,async(req,res)=>{
+    res.render('about')
+})
+
+app.get('/welcome',isLoggedIn,async(req,res)=>{
+    res.render('welcome')
+})
+
+//extras
+
+app.get('/makeuser',async(req,res)=>{
+    const user = new User({name:'staff',user_type:'Staff',username:'staff'});
+    const newuser = await User.register(user,'staff');
+    res.send(newuser);
+})
+app.get('/additem',async(req,res)=>{
+    // const item = new Item({item_name:"vegetable",item_code:await Item.countDocuments()+1,quantity:"40",unit_price:"50",description:"grocery"})
+    // await item.save();
+    res.send(res.locals.currentUser.user_type)
+})
+
+
+//manager
+
+app.get('/stat',isLoggedIn,async (req,res)=>{
+    const data=await Sales.aggregate([
+        {
+            $group: {
+              _id: {$month: "$date"},
+              total_month_revenue: {
+                $sum:"$total"
+              }
+            }
         },
       },
     ]);
@@ -150,75 +171,49 @@ app.get("/stat", isLoggedIn, async (req, res) => {
   }
 });
 
-app.get("/bill", isLoggedIn, async (req, res) => {
-  const items = await Item.find({});
-  res.render("bill", { items });
-});
+app.get('/bill',isLoggedIn,async(req,res)=>{
+    // if(res.locals.currentUser.user_type!='Clerk'){
+    //     req.flash('error', 'Only Sales Clerk is authorized for this action');
+    //     res.redirect('/welcome');
+    // }
+    const items = await Item.find({})
+    res.render('bill',{items})
+})
 
-app.get("/profile", isLoggedIn, async (req, res) => {
-  res.render("profile");
-});
+app.post('/bill',isLoggedIn,async(req,res)=>{
+    if(res.locals.currentUser.user_type!='Clerk'){
+        req.flash('error', 'Only Sales Clerk is authorized for this action');
+        res.redirect('/welcome');
+    }
+    // return res.send(req.body)
+    var bill= req.body
+    console.log(bill)
+    const date=new Date()
+    bill.date=date
 
-app.get("/about", isLoggedIn, async (req, res) => {
-  res.render("about");
-});
+    var bill_items=[]
 
-app.get("/welcome", isLoggedIn, async (req, res) => {
-  res.render("welcome");
-});
-
-app.get("/print", (req, res) => {
-  res.render("print_bill");
-});
-
-app.get("/additem", async (req, res) => {
-  const item = new Item({
-    item_name: "toy",
-    quantity: "5",
-    unit_price: "100",
-    description: "kids",
-  });
-  await item.save();
-  res.send(item);
-});
-
-app.get("/inventory", (req, res) => {
-  res.render("inventory");
-});
-
-app.post("/bill", async (req, res) => {
-  var bill = req.body;
-  console.log(bill);
-  const date = new Date();
-  bill.date = date;
-
-  var bill_items = [];
-
-  for (let i = 0; i < bill.id.length; i++) {
-    var q = await Item.find({ _id: bill.id[i] });
-    q = q[0].quantity;
-    const x = await Item.findOneAndUpdate(
-      { _id: bill.id[i] },
-      { quantity: q - bill.qty[i] }
-    );
-    bill_items.push({
-      item_ref: bill.id[i],
-      name: q[0].item_name,
-      quantity: bill.qty[i],
-      unit_price: bill.price[i],
-      total_price: bill.total[i],
-    });
-    console.log(q);
-  }
-  // console.log(bill_items)
-
-  const new_bill = new Bill({
-    // customer_name:bill.customer_name,contact:bill.contact,
-    items: bill_items,
-    total_cost: bill.sub_total,
-    date: bill.date,
-  });
-  // await new_bill.save();
+    for (let i = 0; i < bill.code.length; i++) {
+        var q = await Item.find({item_code:bill.code[i]})
+        const x = await Item.findOneAndUpdate({item_code:bill.code[i]},{quantity:q[0].quantity-bill.qty[i]})
+        bill_items.push({
+            item_ref:bill.code[i],
+            name: q[0].item_name,
+            quantity:bill.qty[i],
+            unit_price:bill.price[i],
+            total_price:bill.total[i]
+        })
+        console.log(q)
+    }
+    // console.log(bill_items)
+    
+    const new_bill = new Bill({
+        // customer_name:bill.customer_name,contact:bill.contact,
+        items:bill_items,
+        total_cost:bill.sub_total,
+        date:bill.date
+    })
+    await new_bill.save();
 
   bill.id = await Bill.countDocuments();
   bill.bill_items = bill_items;
@@ -230,6 +225,43 @@ app.post("/bill", async (req, res) => {
   // res.send(req.body)
 });
 
-app.listen(3000, () => {
-  console.log("Listening on port 3000!!..");
-});
+})
+
+app.get('/print',(req,res)=>{
+    res.render('print_bill')
+})
+
+
+//inventory portion
+
+app.get('/inventory',isLoggedIn,async(req,res)=>{
+    // if(res.locals.currentUser.user_type=='Clerk'){
+    //     req.flash('error', 'You are not authorized for this action');
+    //     res.redirect('/welcome');
+    // }
+    const allDetails = await Item.find({});
+    res.render('inventory', { details: allDetails })
+})
+
+app.post('/add',async(req,res)=>{
+    newitem=req.body;
+    const item = new Item({item_name:newitem.i1,item_code:await Item.countDocuments()+1,quantity:newitem.i4,unit_price:newitem.i3,description:newitem.i2})
+    await item.save();
+    const allDetails = await Item.find({});
+    res.render('inventory', { details: allDetails})
+})
+
+app.post('/updateItems',async(req,res)=>{
+    //return res.send(req.body)
+    newitem=req.body;
+    const x = await Item.findOneAndUpdate({item_code: parseInt(newitem.i1)},{unit_price:newitem.i3 , quantity:newitem.i4})
+    const allDetails = await Item.find({});
+    res.render('inventory', { details: allDetails})
+})
+
+
+
+app.listen(3000,()=>{
+    console.log("Listening on port 3000!!..")
+})
+

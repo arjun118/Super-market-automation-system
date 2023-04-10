@@ -6,16 +6,16 @@
 ></script>
 
 <script type="text/javascript">
-  var x=11;
+    var x=11;
   google.charts.load("current", { packages: ["corechart"] });
   google.charts.setOnLoadCallback(drawChart);
   function drawChart() {
     var data = google.visualization.arrayToDataTable([
       ["name", "number_of_quantity"],
 
-      <% for(var i=0; i<allsales.length; i++) {%>
+      <% for(var i=0; i<allsalesforpie.length; i++) {%>
 
-          [`<%= allsales[i].item_name %>`, <%= allsales[i].quantity %>],
+          [`<%= allsalesforpie[i].item_name %>`, <%= allsalesforpie[i].total %>],
 
         <% } %>
 
@@ -30,6 +30,7 @@
     var chart = new google.visualization.PieChart(
       document.getElementById("piechart_3d")
     );
+    console.log(data)
     chart.draw(data, options);
   }
 </script>

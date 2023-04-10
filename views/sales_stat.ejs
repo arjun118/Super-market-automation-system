@@ -6,15 +6,16 @@
 ></script>
 
 <script type="text/javascript">
+  var x=11;
   google.charts.load("current", { packages: ["corechart"] });
   google.charts.setOnLoadCallback(drawChart);
   function drawChart() {
     var data = google.visualization.arrayToDataTable([
       ["name", "number_of_quantity"],
 
-      <% for(var i=0; i<newdata.length; i++) {%>
+      <% for(var i=0; i<allsales.length; i++) {%>
 
-          [`<%= newdata[i].item_name %>`, <%= newdata[i].total_sale %>],
+          [`<%= allsales[i].item_name %>`, <%= allsales[i].quantity %>],
 
         <% } %>
 
@@ -40,14 +41,18 @@
     let arr = new Array(13); for (let i=0; i<13; ++i) arr[i] = 0;
     let arr1= new Array(13); for (let i=0; i<13; ++i) arr1[i] = 0;
 
-         <% for(var j=0; j<monthSales.length; j++) {%>
-           arr[ <%= monthSales[j].month %> ] = arr[<%= monthSales[j].month %> ] +  <%= monthSales[j].total_sale %> ;
-           arr1[ <%= monthSales[j].month %> ] = arr1[<%= monthSales[j].month %> ] +  <%= monthSales[j].total_sale %>/<%= monthSales[j].unit_price %> ;
-
-           <% } %>
+        <% for(var j=0; j<allsales.length; j++) {%>
+          <%if( filter==0){%>
+            arr[ <%= allsales[j].date.getMonth() +1 %> ] = arr[<%= allsales[j].date.getMonth() +1 %> ] +  <%= allsales[j].quantity %> ;
+            arr1[ <%= allsales[j].date.getMonth() +1 %> ] = arr1[<%= allsales[j].date.getMonth() +1 %> ] +  <%= allsales[j].quantity %>*<%= allsales[j].unit_price %> ;
+          <%}else if(allsales[j].item_code==filter){%>
+            arr[ <%= allsales[j].date.getMonth() +1 %> ] = arr[<%= allsales[j].date.getMonth() +1 %> ] +  <%= allsales[j].quantity %> ;
+            arr1[ <%= allsales[j].date.getMonth() +1 %> ] = arr1[<%= allsales[j].date.getMonth() +1 %> ] +  <%= allsales[j].quantity %>*<%= allsales[j].unit_price %> ;
+          <%}%>
+        <% } %>
 
     var data = google.visualization.arrayToDataTable([
-      ["Month", "₹ Sales ","Quantity"],
+      ["Month","Quantity","₹ Sales "],
 
       ["1", arr[1],arr1[1]],
       ["2", arr[2],arr1[2]],
@@ -81,6 +86,21 @@
 <div class="total">
   <h1>Stat</h1>
   <div class="first" id="piechart_3d"></div>
+
+  <p><%=filter%></p>
+  <p></p>
+
+  <form action="/stat" method="POST">
+    <label for="filter">Choose options:</label>
+    <select id="filter" name="filter">
+      <option value="0">Total</option>
+      <%for(var j=0; j<allDetails.length; j++) {%>
+        <option value="<%=allDetails[j].item_code%>"><%=allDetails[j].item_name%></option>
+      <%}%>
+    </select>
+    <button type="submit"> Submit </button>
+  </form>
+
   <div class="second" id="columnchart_material"></div>
 </div>
 <style>

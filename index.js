@@ -148,20 +148,25 @@ app.get('/additem',async(req,res)=>{
 //manager
 
 app.get('/stat',isLoggedIn,async (req,res)=>{
+  var filter=0;
   try{
-    const newdata = await Sales.find({});
-    const data=await Sales.aggregate([
-        {
-            $group: {
-              _id: {$month: "$date"},
-              total_month_revenue: {
-                $sum:"$total"
-              }
-            }
-        },
-    ]);
+    const allsales = await Sales.find({});
+    const allDetails = await Item.find({});
 
-    res.render("sales_stat", { newdata, monthSales });
+    res.render('sales_stat',{ allsales, allDetails, filter });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post('/stat',isLoggedIn,async (req,res)=>{
+  var filter=req.body.filter
+  try{
+    const allsales = await Sales.find({});
+    const allDetails = await Item.find({});
+
+    res.render('sales_stat',{ allsales, allDetails, filter });
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
@@ -199,6 +204,14 @@ app.post('/bill',isLoggedIn,async(req,res)=>{
             quantity:bill.qty[i],
             unit_price:bill.price[i],
         })
+        const sell = new Sales({
+          item_code:bill.code[i],
+          item_name: q[0].item_name,
+          unit_price:bill.price[i],
+          quantity:bill.qty[i],
+          date:date,
+        })
+        await sell.save()
         console.log(q)
     }
     // console.log(bill_items)

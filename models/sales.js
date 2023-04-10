@@ -18,8 +18,9 @@ const salesSchema = new Schema(
     //   type: Number,
     //   required: true,
     // },
-    item_id: {
-      type: String,
+
+    item_code: {
+      type: Number,
       required: true,
     },
     item_name: {
@@ -30,13 +31,14 @@ const salesSchema = new Schema(
       type: Number,
       required: true,
     },
-    total_sale: {
+    quantity: {
       type: Number,
       default: 0,
     },
+    date:{
+        type:Date,
+    }
     //total
-  },
-  { tymestamps: true }
-);
+});
 
 module.exports = mongoose.model("Sales", salesSchema);

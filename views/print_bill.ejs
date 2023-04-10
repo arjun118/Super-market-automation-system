@@ -187,7 +187,7 @@ table tr td:last-child {
 				<td><%=bill.bill_items[i].name%></td>
 				<td style="text-align: center;"><%=bill.bill_items[i].quantity%></td>
 				<td style="text-align: center;"><%=bill.bill_items[i].unit_price%></td>
-				<td style="text-align: center;" class="bold"><%=bill.bill_items[i].total_price%></td>
+				<td style="text-align: center;" class="bold"><%=bill.bill_items[i].unit_price*bill.bill_items[i].quantity%></td>
 			</tr>
 		<%}%>
 	</tbody>

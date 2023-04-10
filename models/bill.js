@@ -12,11 +12,10 @@ const billSchema= new Schema({
     // },
     items:[
        { 
-            item_id:{type:String},
+            item_code:{type:Number},
             name:{type:String},
             quantity:{type:Number},
             unit_price:{type:Number},
-            total_price:{type:Number}
         }
     ],
     total_cost:{

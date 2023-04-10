@@ -15,7 +15,7 @@ const Item = require("./models/item");
 const Sales = require("./models/sales");
 const { isLoggedIn } = require("./middleware");
 
-mongoose.connect("mongodb://127.0.0.1:27017/supermarketcm", {
+mongoose.connect("mongodb://127.0.0.1:27017/supermarket", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -115,9 +115,7 @@ app.post("/stat_ind",async(req,res)=>{
   var x= req.body;
   
 })
-app.get("/stat", isLoggedIn, async (req, res) => {
-  try {
-    const newdata = await Sales.find({});
+
 
 //common
 
@@ -150,6 +148,8 @@ app.get('/additem',async(req,res)=>{
 //manager
 
 app.get('/stat',isLoggedIn,async (req,res)=>{
+  try{
+    const newdata = await Sales.find({});
     const data=await Sales.aggregate([
         {
             $group: {
@@ -159,10 +159,7 @@ app.get('/stat',isLoggedIn,async (req,res)=>{
               }
             }
         },
-      },
     ]);
-
-    return res.send(monthSales)
 
     res.render("sales_stat", { newdata, monthSales });
   } catch (err) {
@@ -197,11 +194,10 @@ app.post('/bill',isLoggedIn,async(req,res)=>{
         var q = await Item.find({item_code:bill.code[i]})
         const x = await Item.findOneAndUpdate({item_code:bill.code[i]},{quantity:q[0].quantity-bill.qty[i]})
         bill_items.push({
-            item_ref:bill.code[i],
+            item_code:bill.code[i],
             name: q[0].item_name,
             quantity:bill.qty[i],
             unit_price:bill.price[i],
-            total_price:bill.total[i]
         })
         console.log(q)
     }
@@ -225,7 +221,6 @@ app.post('/bill',isLoggedIn,async(req,res)=>{
   // res.send(req.body)
 });
 
-})
 
 app.get('/print',(req,res)=>{
     res.render('print_bill')

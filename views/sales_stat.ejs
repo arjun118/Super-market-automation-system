@@ -82,9 +82,20 @@
 
     chart.draw(data, google.charts.Bar.convertOptions(options));
   }
+  function printDiv(divName) {
+		console.log("HHHHHHHH")
+    var divContents = document.getElementById(divName).innerHTML;
+        var a = window.open('', '', 'height=500, width=500');
+        a.document.write('<html>');
+        a.document.write('<body >');
+        a.document.write(divContents);
+        a.document.write('</body></html>');
+        a.document.close();
+        a.print();
+	}
 </script>
 
-<div class="total">
+<div class="total" id="printableArea" style="margin: auto; ">
   <h1>Stat</h1>
   <div class="first" id="piechart_3d"></div>
 
@@ -104,6 +115,13 @@
 
   <div class="second" id="columnchart_material"></div>
 </div>
+
+<br><br>
+<div class="text-center">
+	<input type="button" class="btn btn-primary btn-lg" onclick="printDiv('printableArea')" value="Print" />
+</div>
+<br><br>
+
 <style>
   .first {
     width: auto;

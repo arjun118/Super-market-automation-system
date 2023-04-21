@@ -82,7 +82,7 @@ app.post(
   }
 );
 
-app.get("/logout", async (req, res) => {
+app.get("/logout",isLoggedIn, async (req, res) => {
   req.logout(req.user, (err) => {
     if (err) return next(err);
     req.flash("success", "Goodbye!");
@@ -133,21 +133,25 @@ app.get('/welcome',isLoggedIn,async(req,res)=>{
 
 //extras
 
-app.get('/makeuser',async(req,res)=>{
-    const user = new User({name:'staff',user_type:'Staff',username:'staff'});
-    const newuser = await User.register(user,'staff');
-    res.send(newuser);
-})
-app.get('/additem',async(req,res)=>{
-    // const item = new Item({item_name:"vegetable",item_code:await Item.countDocuments()+1,quantity:"40",unit_price:"50",description:"grocery"})
-    // await item.save();
-    res.send(res.locals.currentUser.user_type)
-})
+// app.get('/makeuser',async(req,res)=>{
+//     const user = new User({name:'staff',user_type:'Staff',username:'staff'});
+//     const newuser = await User.register(user,'staff');
+//     res.send(newuser);
+// })
+// app.get('/additem',async(req,res)=>{
+//     // const item = new Item({item_name:"vegetable",item_code:await Item.countDocuments()+1,quantity:"40",unit_price:"50",description:"grocery"})
+//     // await item.save();
+//     res.send(res.locals.currentUser.user_type)
+// })
 
 
 //manager
 
 app.get('/stat',isLoggedIn,async (req,res)=>{
+  if(res.locals.currentUser.user_type!='Manager'){
+      req.flash('error', 'Only Manager is authorized for this action');
+      res.redirect('/welcome');
+  }
   var filter=0;
   try{
     const allsalesforpie = await Sales.aggregate([
@@ -210,10 +214,10 @@ app.post('/stat',isLoggedIn,async (req,res)=>{
 });
 
 app.get('/bill',isLoggedIn,async(req,res)=>{
-    // if(res.locals.currentUser.user_type!='Clerk'){
-    //     req.flash('error', 'Only Sales Clerk is authorized for this action');
-    //     res.redirect('/welcome');
-    // }
+    if(res.locals.currentUser.user_type!='Clerk'){
+        req.flash('error', 'Only Sales Clerk is authorized for this action');
+        res.redirect('/welcome');
+    }
     const items = await Item.find({})
     res.render('bill',{items})
 })
@@ -271,23 +275,27 @@ app.post('/bill',isLoggedIn,async(req,res)=>{
 });
 
 
-app.get('/print',(req,res)=>{
-    res.render('print_bill')
+app.get('/print',isLoggedIn,(req,res)=>{
+  if(res.locals.currentUser.user_type!='Clerk'){
+    req.flash('error', 'Only Sales Clerk is authorized for this action');
+    res.redirect('/welcome');
+  }
+  res.render('print_bill')
 })
 
 
 //inventory portion
 
 app.get('/inventory',isLoggedIn,async(req,res)=>{
-    // if(res.locals.currentUser.user_type=='Clerk'){
-    //     req.flash('error', 'You are not authorized for this action');
-    //     res.redirect('/welcome');
-    // }
+    if(res.locals.currentUser.user_type=='Clerk'){
+        req.flash('error', 'You are not authorized for this action');
+        res.redirect('/welcome');
+    }
     const allDetails = await Item.find({});
     res.render('inventory', { details: allDetails })
 })
 
-app.post('/add',async(req,res)=>{
+app.post('/add',isLoggedIn,async(req,res)=>{
     newitem=req.body;
     const item = new Item({item_name:newitem.i1,item_code:await Item.countDocuments()+1,quantity:newitem.i4,unit_price:newitem.i3,description:newitem.i2})
     await item.save();
@@ -295,7 +303,7 @@ app.post('/add',async(req,res)=>{
     res.render('inventory', { details: allDetails})
 })
 
-app.post('/updateItems',async(req,res)=>{
+app.post('/updateItems',isLoggedIn,async(req,res)=>{
     //return res.send(req.body)
     newitem=req.body;
     const x = await Item.findOneAndUpdate({item_code: parseInt(newitem.i1)},{unit_price:newitem.i3 , quantity:newitem.i4})

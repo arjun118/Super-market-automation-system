@@ -1,3 +1,5 @@
+require('dotenv').config({ path: '.env' });
+
 const express = require("express");
 const path = require("path");
 const ejsMate = require("ejs-mate");
@@ -15,10 +17,20 @@ const Item = require("./models/item");
 const Sales = require("./models/sales");
 const { isLoggedIn } = require("./middleware");
 
-mongoose.connect("mongodb://127.0.0.1:27017/supermarket", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const MongoDBStore = require("connect-mongo");
+
+
+const dbUrl = process.env.DB_URL ;
+
+console.log(dbUrl)
+
+mongoose
+  .connect(dbUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  // .catch (error => console.log(error));
+;
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
